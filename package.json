@@ -1,0 +1,16 @@
+{
+  "name": "simplifinance",
+  "scripts": {
+    "build-css": "npx @tailwindcss/cli -i ./styles.css -o ./dist/styles.css --watch",
+    "build-css-prod": "npx @tailwindcss/cli -i ./styles.css -o ./dist/styles.css --minify"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.10",
+    "dotenv": "^16.5.0",
+    "firebase-admin": "^13.4.0",
+    "firebase-functions": "^6.3.2"
+  },
+  "devDependencies": {
+    "tailwindcss": "^4.1.10"
+  }
+}

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimpliFinance – Helping Advisors Educate and Engage</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Urbanist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Validation and Form Libraries -->
+    <script src="https://unpkg.com/validator@13.11.0/validator.min.js"></script>
+    <script src="https://unpkg.com/cleave-zen@0.0.17/dist/cleave-zen.umd.js"></script>
+
+    <link rel="stylesheet" href="./dist/styles.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800">
+    <!-- Header will be loaded here -->
+    <div id="header-container"></div>
+
+    <!-- Full-width Hero Section -->
+    <div id="hero-container" class="w-full"></div>
+
+    <main class="container mx-auto px-4 sm:px-6 py-8">
+        <section id="home-page" class="page-section">
+            <!-- Challenges Section will be loaded here -->
+            <div id="challenges-container"></div>
+
+            <!-- Keep It Simple Section will be loaded here -->
+            <div id="keep-simple-container"></div>
+
+            <!-- Plans Section will be loaded here -->
+            <div id="plans-container"></div>
+        </section>
+
+        <!-- Signup Billing Page will be loaded dynamically -->
+        <section id="signup-billing-page" class="page-section hidden"></section>
+
+        <!-- User Dashboard Page will be loaded dynamically -->
+        <section id="user-dashboard-page" class="page-section hidden"></section>
+
+        <!-- Login Page will be loaded here -->
+        <section id="login-page" class="page-section hidden">
+            <div id="login-container"></div>
+        </section>
+
+        <!-- Library Page will be loaded dynamically -->
+        <section id="library-page" class="page-section hidden w-full"></section>
+
+        <!-- Admin Page will be loaded dynamically -->
+        <section id="admin-page" class="page-section hidden"></section>
+
+        <!-- Services Page will be loaded dynamically -->
+        <section id="services-page" class="page-section hidden"></section>
+
+        <!-- About Us Page will be loaded dynamically -->
+        <section id="about-us-page" class="page-section hidden"></section>
+
+        <!-- Terms & Conditions Page will be loaded dynamically -->
+        <section id="terms-conditions-page" class="page-section hidden"></section>
+
+        <!-- Contact Section will be loaded here -->
+        <div id="contact-container"></div>
+    </main>
+
+    <!-- Footer will be loaded here -->
+    <div id="footer-container"></div>
+
+    <!-- Main Application Script with Modular Architecture -->
+    <script type="module">
+        import { ComponentLoader } from './js/component-loader.js';
+        import { ComponentManager } from './js/component-manager.js';
+        import { SimpliFinanceApp } from './js/app.js';
+        import { UIComponentAdapter } from './js/component-adapter.js';
+        import { initializeWithComponents } from './js/app-component-init.js';
+
+        // Define component mapping for initial load
+        const componentMap = {
+            './components/header.html': '#header-container',
+            './components/home-hero.html': '#hero-container',
+            './components/challenges.html': '#challenges-container',
+            './components/keep-simple.html': '#keep-simple-container',
+            './components/plans.html': '#plans-container',
+            './components/login.html': '#login-container',
+            './components/contact.html': '#contact-container',
+            './components/footer.html': '#footer-container'
+        };
+
+        // Initialize components when DOM is loaded
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Load initial components
+                await ComponentLoader.initComponents(componentMap);
+                // Create component manager for dynamic components
+                window.componentManager = new ComponentManager();
+
+                // Initialize the App only once
+                const app = new SimpliFinanceApp();
+                window.simpliFinanceApp = app;
+                await app.initialize();
+
+                // Initialize the UI Component Adapter after app is ready
+                UIComponentAdapter.initialize(app.ui);
+
+                // Initialize router after adapter is set up
+                await app.router.initialize();
+
+                // Initialize component-specific functionality
+                initializeWithComponents();
+
+            } catch (error) {
+                console.error('Error initializing components:', error);
+            }
+        });
+    </script>
+
+    <!-- Fallback for browsers that don't support modules -->
+    <script nomodule>
+        alert('Your browser does not support ES6 modules. Please update your browser for the best experience.');
+    </script>
+</body>
+
+</html>

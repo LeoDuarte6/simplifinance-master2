@@ -1,0 +1,72 @@
+<!-- Library Hero Section - Full Width -->
+<div class="w-full relative overflow-hidden min-h-[500px]">
+    <!-- Absolute positioned image that will stretch full width -->
+    <div class="absolute inset-0">
+        <img src="public/edu-lib-hero.jpeg" alt="Educational Library" class="w-full h-full object-cover">
+        <!-- Fixed overlay gradient -->
+        <div class="absolute inset-0" style="background: linear-gradient(90deg, rgba(28,64,64,0.8) 0%, rgba(28,64,64,0.4) 100%);"></div>
+    </div>
+
+    <!-- Content container -->
+    <div class="container mx-auto relative z-10 px-8 py-16 flex flex-col justify-center min-h-[500px]">
+        <div class="max-w-2xl text-white">
+            <h1 class="text-4xl sm:text-5xl font-extrabold mb-4">Unlock a World of<br>Financial Knowledge</h1>
+            <p class="text-lg sm:text-xl font-medium mb-4">SimpliFinance's Educational Library offers a comprehensive collection of financial advisor resources designed to enhance your expertise and equip you with the tools needed for smarter client guidance.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content Area with Categories Sidebar -->
+<div class="container mx-auto px-4 pb-16 mt-12">
+    <div class="flex flex-col md:flex-row gap-8">
+        <!-- Categories Sidebar -->
+        <div class="md:w-1/4">
+            <div class="sticky top-24 bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4 pb-2 border-b border-gray-200">Categories</h2>
+                <ul id="library-categories-list" class="space-y-3">
+                    <!-- Categories will be dynamically populated here -->
+                    <li class="library-category-loading">
+                        <div class="animate-pulse flex items-center">
+                            <div class="h-2 w-2 bg-gray-200 rounded-full mr-2"></div>
+                            <div class="h-4 bg-gray-200 rounded w-full"></div>
+                        </div>
+                    </li>
+                    <li class="library-category-loading">
+                        <div class="animate-pulse flex items-center">
+                            <div class="h-2 w-2 bg-gray-200 rounded-full mr-2"></div>
+                            <div class="h-4 bg-gray-200 rounded w-full"></div>
+                        </div>
+                    </li>
+                    <li class="library-category-loading">
+                        <div class="animate-pulse flex items-center">
+                            <div class="h-2 w-2 bg-gray-200 rounded-full mr-2"></div>
+                            <div class="h-4 bg-gray-200 rounded w-full"></div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Library Content -->
+        <div id="library-content-list" class="md:w-3/4">
+            <!-- Content will be dynamically populated here -->
+        </div>
+    </div>
+</div>
+
+<!-- Request New Content Section -->
+<div class="container mx-auto px-4 pb-16">
+    <div class="bg-gray-50 rounded-lg p-8 text-center md:text-left">
+        <div class="md:flex md:items-center md:justify-between">
+            <div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">Have a topic request?</h3>
+                <p class="text-lg text-gray-600">SimpliFinance advisors can send their requests to <a href="mailto:ideas@simplifinancellc.com" class="text-teal-600 hover:text-teal-500 font-semibold">ideas@simplifinancellc.com</a></p>
+            </div>
+            <div class="mt-4 md:mt-0">
+                <a href="mailto:ideas@simplifinancellc.com" class="inline-block bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-6 rounded-md transition-colors duration-300">
+                    Submit a Request
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
