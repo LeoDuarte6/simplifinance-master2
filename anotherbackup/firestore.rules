@@ -1,0 +1,40 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Users can only read their own user document
+    match /users/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+
+      // Users can create their own documents during initial signup (no sensitive fields)
+      allow create: if request.auth != null &&
+        request.auth.uid == userId &&
+        // Ensure no sensitive payment fields are set during creation
+        !("plan" in request.resource.data) &&
+        !("subscriptionStatus" in request.resource.data) &&
+        !("authNetSubscriptionId" in request.resource.data) &&
+        !("isAdmin" in request.resource.data);
+
+      // Users can update only safe profile fields, NOT payment-related fields
+      allow update: if request.auth != null &&
+        request.auth.uid == userId &&
+        // Prevent modification of sensitive fields
+        !("plan" in request.resource.data.diff(resource.data).affectedKeys()) &&
+        !("subscriptionStatus" in request.resource.data.diff(resource.data).affectedKeys()) &&
+        !("authNetSubscriptionId" in request.resource.data.diff(resource.data).affectedKeys()) &&
+        !("isAdmin" in request.resource.data.diff(resource.data).affectedKeys()) &&
+        !("createdAt" in request.resource.data.diff(resource.data).affectedKeys());
+    }
+
+    // Admin users can read/write everything
+    match /{document=**} {
+      allow read, write: if request.auth != null &&
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+    }
+
+    // Deny all other access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

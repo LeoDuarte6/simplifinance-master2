@@ -1,0 +1,16 @@
+{
+  "users": [
+    {
+      "localId": "Tjzbv7HaEKaffPzv6UAHAOMJI4E3",
+      "email": "emerson@keepfinancesimple.com",
+      "emailVerified": false,
+      "passwordHash": "lGmzJyQ3Sc5MiPomI49xe75LASDd4XPpZo3xtAA0G4Z1Kwr0iUfwhavfVjcth6Z8e+hK3xq1ztgtVSg2+/mGLw==",
+      "salt": "VpCVZ13y2pDTWA==",
+      "displayName": "Emerson Roth",
+      "lastSignedInAt": "1750698149660",
+      "createdAt": "1750521270164",
+      "disabled": false,
+      "providerUserInfo": []
+    }
+  ]
+}

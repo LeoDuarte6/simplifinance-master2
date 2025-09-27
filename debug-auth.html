@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Auth Debug</title>
+</head>
+<body>
+    <h1>Firebase Auth Debug</h1>
+    <div id="status">Testing...</div>
+    <script type="module">
+        const firebaseConfig = {
+            apiKey: "AIzaSyDRy7LBdKooljXxTuZq_FvpfXJv4Ec65wQ",
+            authDomain: "simplifinance-65ac9.firebaseapp.com",
+            projectId: "simplifinance-65ac9",
+            storageBucket: "simplifinance-65ac9.firebasestorage.app",
+            messagingSenderId: "122545134930",
+            appId: "1:122545134930:web:2ff0a9c123179697fbae8b",
+            measurementId: "G-GL5JQ4XM2V"
+        };
+
+        try {
+            const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js");
+            const { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js");
+
+            console.log("Firebase imports successful");
+
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+
+            console.log("Firebase initialized:", app);
+            console.log("Auth object:", auth);
+
+            document.getElementById('status').innerHTML = 'Firebase initialized successfully. Testing password reset...';
+
+            // Test password reset email
+            try {
+                await sendPasswordResetEmail(auth, 'jack@keepfinancesimple.com');
+                document.getElementById('status').innerHTML += '<br>✅ Password reset email sent successfully!';
+                console.log("Password reset email sent");
+            } catch (error) {
+                document.getElementById('status').innerHTML += '<br>❌ Password reset failed: ' + error.message;
+                console.error("Password reset error:", error);
+            }
+
+            // Test login
+            try {
+                await signInWithEmailAndPassword(auth, 'jack@keepfinancesimple.com', 'jackisanadmin!!!');
+                document.getElementById('status').innerHTML += '<br>✅ Login successful!';
+                console.log("Login successful");
+            } catch (error) {
+                document.getElementById('status').innerHTML += '<br>❌ Login failed: ' + error.message;
+                console.error("Login error:", error);
+            }
+
+        } catch (error) {
+            document.getElementById('status').innerHTML = '❌ Firebase initialization failed: ' + error.message;
+            console.error("Firebase init error:", error);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!-- Footer Component -->
+<footer class="bg-gray-100 py-12 mt-16">
+    <div class="max-w-6xl mx-auto px-6">
+        <div class="grid md:grid-cols-3 gap-8">
+            <!-- Logo and Contact -->
+            <div class="md:col-span-1">
+                <div class="mb-4">
+                    <img src="public/logo.webp" alt="SimpliFinance Logo" class="h-20 w-auto">
+                </div>
+                <div class="space-y-2 text-sm text-gray-600">
+                    <div class="flex items-center">
+                        <svg class="w-4 h-4 mr-2 text-teal-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                        </svg>
+                        7150 East Camelback Road<br>
+                        Scottsdale, Arizona 85251
+                    </div>
+                    <div class="flex items-center">
+                        <svg class="w-4 h-4 mr-2 text-teal-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
+                            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+                        </svg>
+                        support@simplifinancellc.com
+                    </div>
+                </div>
+                <a href="mailto:support@simplifinancellc.com" class="mt-4 bg-teal-600 text-white px-6 py-2 rounded-md text-sm font-semibold hover:bg-teal-700 transition inline-block">
+                    CONTACT US
+                </a>
+            </div>
+
+            <!-- Site Links -->
+            <div>
+                <h3 class="font-semibold text-gray-800 mb-4">Site Links</h3>
+                <ul class="space-y-2 text-sm text-gray-600">
+                    <li><a href="/" class="hover:text-teal-600 transition">Home</a></li>
+                    <li><a href="/about" class="hover:text-teal-600 transition">About Us</a></li>
+                    <li><a href="/services" class="hover:text-teal-600 transition">Services</a></li>
+                </ul>
+            </div>
+
+            <!-- Quick Links -->
+            <div>
+                <h3 class="font-semibold text-gray-800 mb-4">Quick Links</h3>
+                <ul class="space-y-2 text-sm text-gray-600">
+                    <li><a href="/dashboard" class="hover:text-teal-600 transition">My Account</a></li>
+                    <li><a href="/terms-conditions" class="hover:text-teal-600 transition">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Copyright -->
+        <div class="border-t border-gray-300 mt-8 pt-6 flex justify-center items-center">
+            <p class="text-sm text-gray-600">
+                © <span id="currentYear">2025</span>, SimpliFinance. All Rights Reserved.
+            </p>
+        </div>
+    </div>
+    <script>document.getElementById('currentYear').textContent = new Date().getFullYear();</script>
+</footer>

@@ -1,0 +1,50 @@
+<!-- Login Page Component -->
+<div class="max-w-md mx-auto bg-white p-8 md:p-10 rounded-xl shadow-xl mt-10">
+    <h2 class="text-2xl font-bold text-center text-gray-700 mb-8">Login to SimpliFinance</h2>
+    <form id="login-form" class="space-y-5">
+        <div>
+            <label for="email-login" class="block text-sm font-medium text-gray-600">Email address</label>
+            <input type="email" name="email" id="email-login" required autocomplete="username"
+                class="mt-1 block w-full px-3 py-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
+                placeholder="you@example.com">
+        </div>
+        <div>
+            <label for="password-login" class="block text-sm font-medium text-gray-600">Password</label>
+            <div class="relative">
+                <input type="password" name="password" id="password-login" required autocomplete="current-password"
+                    class="mt-1 block w-full px-3 py-2.5 pr-10 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
+                    placeholder="••••••••">
+                <button type="button" id="login-password-toggle"
+                    class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                    aria-label="Toggle password visibility">
+                    <svg id="login-password-hide-icon" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                    </svg>
+                    <svg id="login-password-show-icon" class="h-5 w-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L12 12m7.072-1.927A9.97 9.97 0 0112 5c-1.346 0-2.628.267-3.798.751m2.125 14.074A10.05 10.05 0 0112 19c4.478 0 8.268-2.943 9.542-7a9.97 9.97 0 00-1.563-3.029"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div>
+            <button type="submit" id="login-submit-btn"
+                class="w-full flex items-center justify-center bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-6 rounded-md shadow-md transition-colors duration-300 text-base">
+                <span class="loader hidden mr-2" id="login-loader"></span>
+                Login
+            </button>
+        </div>
+        <div class="text-center">
+            <button type="button" id="forgot-password-btn"
+                class="text-sm text-teal-600 hover:text-teal-500 font-medium">
+                Forgot your password?
+            </button>
+            <!-- Inline message area for forgot password and login errors -->
+            <div id="login-message" class="mt-2 text-sm hidden"></div>
+        </div>
+    </form>
+    <p class="mt-6 text-center text-sm text-gray-500">
+        Don't have an account? <a href="/" id="login-signup-link"
+            class="font-medium text-teal-600 hover:text-teal-500">Sign up for a plan.</a>
+    </p>
+</div>

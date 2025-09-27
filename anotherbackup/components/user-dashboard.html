@@ -1,0 +1,233 @@
+<!-- User Dashboard Component -->
+<div class="w-full px-4 sm:px-6 lg:px-8">
+    <div class="max-w-5xl mx-auto">
+    <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold text-gray-700">Your Dashboard</h1>
+            <button id="dashboard-logout-button"
+                class="px-4 py-2 rounded-md text-base font-semibold text-white bg-red-500 hover:bg-red-600 transition-colors">
+                Logout
+            </button>
+        </div>
+
+        <!-- Current Subscription Status -->
+        <div class="grid md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-gradient-to-r from-teal-500 to-teal-600 text-white p-6 rounded-lg">
+                <h3 class="text-lg font-semibold mb-2">Current Plan</h3>
+                <p id="dashboard-current-plan" class="text-2xl font-bold">Loading...</p>
+                <p id="dashboard-plan-status" class="text-teal-100 text-sm mt-1">Active</p>
+            </div>
+            <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-lg">
+                <h3 class="text-lg font-semibold mb-2">Next Billing</h3>
+                <p id="dashboard-next-billing" class="text-2xl font-bold">Loading...</p>
+                <p class="text-blue-100 text-sm mt-1">Automatic renewal</p>
+            </div>
+            <div class="bg-gradient-to-r from-purple-500 to-purple-600 text-white p-6 rounded-lg">
+                <h3 class="text-lg font-semibold mb-2">Subscription ID</h3>
+                <p id="dashboard-subscription-id" class="text-lg font-bold">Loading...</p>
+                <p class="text-purple-100 text-sm mt-1">For support reference</p>
+            </div>
+        </div>
+
+        <!-- Profile Management -->
+        <div class="grid md:grid-cols-2 gap-8">
+            <!-- Profile Information -->
+            <div class="bg-gray-50 rounded-lg p-6">
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">Profile Information</h3>
+                <form id="profile-update-form" class="space-y-4">
+                    <div>
+                        <label for="profile-name" class="block text-sm font-medium text-gray-600">Full Name</label>
+                        <input type="text" id="profile-name" name="name"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm">
+                    </div>
+                    <div>
+                        <label for="profile-email" class="block text-sm font-medium text-gray-600">Email Address</label>
+                        <input type="email" id="profile-email" name="email" disabled autocomplete="email"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100 sm:text-sm">
+                        <p class="text-xs text-gray-500 mt-1">Email cannot be changed for security reasons</p>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="profile-is-advisor" name="isAdvisor"
+                            class="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded">
+                        <label for="profile-is-advisor" class="ml-2 text-sm text-gray-600">I am a financial advisor</label>
+                    </div>
+                    <button type="submit"
+                        class="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-300">
+                        Update Profile
+                    </button>
+                </form>
+            </div>
+
+            <!-- Subscription Management -->
+            <div class="bg-gray-50 rounded-lg p-6">
+                <h3 class="text-xl font-semibold text-gray-700 mb-4">Subscription Management</h3>
+
+                <!-- Payment Information Section (moved inline) -->
+                <div class="mb-6">
+                    <h4 class="text-lg font-medium text-gray-700 mb-3">Payment Information</h4>
+
+                    <!-- Current Payment Method Display -->
+                    <div id="current-payment-display" class="mb-4 p-4 bg-white rounded-lg border">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Current Payment Method</p>
+                                <p class="text-lg text-gray-800">•••• •••• •••• ••••</p>
+                                <p class="text-sm text-gray-500">Payment details are securely stored</p>
+                            </div>
+                            <button id="update-payment-btn"
+                                class="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold rounded-md transition-colors duration-300">
+                                Update Payment
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Update Payment Form (Initially Hidden) -->
+                    <form id="update-payment-form" class="hidden space-y-4 mb-4">
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                            <div class="flex items-start">
+                                <svg class="w-5 h-5 text-blue-500 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                                </svg>
+                                <div class="ml-3">
+                                    <h4 class="text-sm font-medium text-blue-800">Update Your Payment Method</h4>
+                                    <p class="text-xs text-blue-600 mt-1">Enter your new payment details below. Your subscription will continue uninterrupted.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="update-card-number" class="block text-sm font-medium text-gray-600">Card Number *</label>
+                            <input type="text" name="cardNumber" id="update-card-number" required
+                                class="mt-1 block w-full px-3 py-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
+                                placeholder="4111 1111 1111 1111" maxlength="19">
+                            <div class="error-message text-red-500 text-xs mt-1 hidden"></div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label for="update-expiry" class="block text-sm font-medium text-gray-600">Expiry Date *</label>
+                                <input type="text" name="expiry" id="update-expiry" required
+                                    class="mt-1 block w-full px-3 py-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
+                                    placeholder="MM/YY" maxlength="5">
+                                <div class="error-message text-red-500 text-xs mt-1 hidden"></div>
+                            </div>
+                            <div>
+                                <label for="update-cvv" class="block text-sm font-medium text-gray-600">CVV *</label>
+                                <input type="text" name="cvv" id="update-cvv" required
+                                    class="mt-1 block w-full px-3 py-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
+                                    placeholder="123" maxlength="4">
+                                <div class="error-message text-red-500 text-xs mt-1 hidden"></div>
+                            </div>
+                        </div>
+
+                        <!-- Billing Address Section -->
+                        <div class="border-t border-gray-200 pt-4">
+                            <h4 class="text-sm font-medium text-gray-700 mb-3">Billing Address</h4>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label for="update-address-1" class="block text-sm font-medium text-gray-600">Address Line 1 *</label>
+                                    <input type="text" name="addressLine1" id="update-address-1" required
+                                        class="mt-1 block w-full px-3 py-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
+                                        placeholder="123 Main Street">
+                                    <div class="error-message text-red-500 text-xs mt-1 hidden"></div>
+                                </div>
+                                <div>
+                                    <label for="update-address-2" class="block text-sm font-medium text-gray-600">Address Line 2</label>
+                                    <input type="text" name="addressLine2" id="update-address-2"
+                                        class="mt-1 block w-full px-3 py-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
+                                        placeholder="Apt, Suite, etc.">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-3 gap-3 mt-3">
+                                <div>
+                                    <label for="update-city" class="block text-sm font-medium text-gray-600">City *</label>
+                                    <input type="text" name="city" id="update-city" required
+                                        class="mt-1 block w-full px-3 py-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
+                                        placeholder="Seattle">
+                                    <div class="error-message text-red-500 text-xs mt-1 hidden"></div>
+                                </div>
+                                <div>
+                                    <label for="update-state" class="block text-sm font-medium text-gray-600">State *</label>
+                                    <input type="text" name="state" id="update-state" required
+                                        class="mt-1 block w-full px-3 py-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
+                                        placeholder="WA">
+                                    <div class="error-message text-red-500 text-xs mt-1 hidden"></div>
+                                </div>
+                                <div>
+                                    <label for="update-zip" class="block text-sm font-medium text-gray-600">Postal Code *</label>
+                                    <input type="text" name="zipCode" id="update-zip" required
+                                        class="mt-1 block w-full px-3 py-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
+                                        placeholder="98101">
+                                    <div class="error-message text-red-500 text-xs mt-1 hidden"></div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3 mt-3">
+                                <div>
+                                    <label for="update-country" class="block text-sm font-medium text-gray-600">Country *</label>
+                                    <input type="text" name="country" id="update-country"
+                                        value="United States" readonly
+                                        class="mt-1 block w-full px-3 py-2.5 border border-gray-300 rounded-md shadow-sm bg-gray-100 sm:text-sm">
+                                    <input type="hidden" name="countryCode" value="US">
+                                </div>
+                                <div>
+                                    <label for="update-phone" class="block text-sm font-medium text-gray-600">Phone Number</label>
+                                    <input type="tel" name="phoneNumber" id="update-phone"
+                                        class="mt-1 block w-full px-3 py-2.5 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
+                                        placeholder="(555) 123-4567">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                            <div class="flex items-start">
+                                <svg class="w-5 h-5 text-yellow-500 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                </svg>
+                                <div class="ml-3">
+                                    <h4 class="text-sm font-medium text-yellow-800">Important</h4>
+                                    <p class="text-xs text-yellow-700 mt-1">Your payment information is encrypted and secure. This will only update your stored payment method.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payment Update Error Message Container -->
+                        <div id="payment-update-message" class="mt-4 p-3 rounded-md text-sm hidden" style="display: none;">
+                            <!-- Error/success message will be injected here by JavaScript -->
+                        </div>
+
+                        <div class="flex space-x-3 pt-3">
+                            <button type="button" id="cancel-payment-update"
+                                class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-3 px-6 rounded-md transition-colors duration-300 text-base">
+                                Cancel
+                            </button>
+                            <button type="submit" id="update-payment-submit-btn"
+                                class="w-full flex items-center justify-center bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-6 rounded-md shadow-md transition-colors duration-300 text-base">
+                                <span class="loader hidden mr-2" id="update-payment-loader"></span>
+                                Update Payment Method
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Subscription Actions -->
+                <div class="space-y-4">
+                    <button id="cancel-subscription"
+                        class="w-full flex items-center justify-center bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-md transition-colors duration-300">
+                        <span class="loader hidden mr-2" id="cancel-loader"></span>
+                        Cancel Subscription
+                    </button>
+
+                    <div class="text-center space-y-2">
+                        <p class="text-xs text-gray-500">
+                            Need help? Email us at support@simplifinance.com
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>

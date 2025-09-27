@@ -1,0 +1,12 @@
+{
+  "users": [
+    {
+      "localId": "test123",
+      "email": "scrypt-test@temp.com",
+      "emailVerified": false,
+      "passwordHash": "XbvQ71YaRZPKdkz7g4FPQOVUAiM7Yl46K9QaHRrtmAsT8jNT92OyRGZCdqdg2Dy432X24bqP+CqdOmi1JTHezw==",
+      "salt": "nHdMIiOcCDhjdw==",
+      "displayName": "Test User"
+    }
+  ]
+}

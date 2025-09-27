@@ -1,0 +1,389 @@
+<!-- Admin Dashboard Component -->
+<div class="max-w-7xl mx-auto p-6 bg-white">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-8 border-b border-gray-200 pb-4">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+            <p class="text-gray-600 mt-1">Manage users, content, and system settings</p>
+        </div>
+        <button id="admin-logout-button"
+            class="px-4 py-2 rounded-md text-base font-semibold text-white bg-red-500 hover:bg-red-600 transition-colors">
+            Logout
+        </button>
+    </div>
+
+    <!-- Message container for modal actions -->
+    <div id="modal-action-message" class="mb-6 p-4 rounded-md text-sm hidden"></div>
+
+    <!-- Tab Navigation -->
+    <div class="mb-8">
+        <nav class="flex space-x-8" aria-label="Tabs">
+            <button id="tab-user-management" class="admin-tab active border-b-2 border-teal-500 py-2 px-1 text-sm font-medium text-teal-600">
+                User Management
+            </button>
+            <button id="tab-content-upload" class="admin-tab border-b-2 border-transparent py-2 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                Content Upload
+            </button>
+            <button id="tab-content-management" class="admin-tab border-b-2 border-transparent py-2 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                Content Management
+            </button>
+        </nav>
+    </div>
+
+    <!-- Tab Content -->
+
+    <!-- User Management Tab -->
+    <div id="panel-user-management" class="admin-panel">
+        <!-- Create New User Section -->
+        <div class="bg-gray-50 rounded-lg p-6 mb-8">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Create New User</h3>
+            <form id="create-user-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="new-user-email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" name="email" id="new-user-email" required
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500">
+                </div>
+                <div>
+                    <label for="new-user-password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <div class="relative">
+                        <input type="password" name="password" id="new-user-password" required
+                            class="mt-1 block w-full px-3 py-2 pr-10 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500">
+                        <button type="button" id="toggle-new-user-password" class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <label for="new-user-name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                    <input type="text" name="name" id="new-user-name" required
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500">
+                </div>
+                <div>
+                    <label for="new-user-plan" class="block text-sm font-medium text-gray-700">Plan</label>
+                    <select name="plan" id="new-user-plan" required
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 bg-white">
+                        <option value="Essentials Plan">Essentials Plan</option>
+                        <option value="Premium Plan">Premium Plan</option>
+                    </select>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <label class="flex items-center">
+                        <input type="checkbox" name="isAdmin" id="new-user-is-admin" class="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded">
+                        <span class="ml-2 text-sm text-gray-700">Admin User</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="checkbox" name="isAdvisor" id="new-user-is-advisor" class="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded">
+                        <span class="ml-2 text-sm text-gray-700">Advisor</span>
+                    </label>
+                </div>
+                <div>
+                    <button type="submit" id="create-user-submit-btn"
+                        class="w-full flex items-center justify-center bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-4 rounded-md transition-colors">
+                        <span class="loader hidden mr-2" id="create-user-loader"></span>
+                        Create User
+                    </button>
+                </div>
+                <!-- Message container for create user form -->
+                <div id="create-user-message" class="md:col-span-2 mt-4 p-3 rounded-md text-sm hidden"></div>
+            </form>
+        </div>
+
+        <!-- Users Table Section -->
+        <div class="bg-white rounded-lg shadow overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-lg font-semibold text-gray-900">All Users</h3>
+                    <button id="refresh-users-btn" class="px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm font-medium text-gray-700 transition-colors">
+                        Refresh
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div id="users-loading" class="flex justify-center items-center py-12">
+                <div class="loader"></div>
+                <span class="ml-3 text-gray-600">Loading users...</span>
+            </div>
+
+            <!-- Users Table -->
+            <div id="users-table-container" class="hidden overflow-x-auto">
+                <div class="min-h-[600px]">
+                    <table class="w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plan</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body" class="bg-white divide-y divide-gray-200">
+                            <!-- Users will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination Controls -->
+                <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1 flex justify-between sm:hidden">
+                            <button id="prev-page-mobile" disabled class="relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-md text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                                Previous
+                            </button>
+                            <button id="next-page-mobile" disabled class="ml-3 relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-md text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                                Next
+                            </button>
+                        </div>
+                        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                            <div>
+                                <p class="text-sm text-gray-700">
+                                    Showing <span id="showing-start" class="font-medium">0</span> to <span id="showing-end" class="font-medium">0</span> of <span id="total-users" class="font-medium">0</span> users
+                                </p>
+                            </div>
+                            <div>
+                                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                                    <button id="prev-page" disabled class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                                        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                        </svg>
+                                        Previous
+                                    </button>
+                                    <div id="page-numbers" class="flex">
+                                        <!-- Page numbers will be inserted here -->
+                                    </div>
+                                    <button id="next-page" disabled class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                                        Next
+                                        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div id="users-empty-state" class="hidden text-center py-12">
+                <p class="text-gray-500">No users found</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Upload Tab -->
+    <div id="panel-content-upload" class="admin-panel hidden">
+        <div class="max-w-2xl mx-auto">
+            <div class="bg-white rounded-lg shadow p-8">
+                <h3 class="text-xl font-bold text-gray-900 mb-6">Upload New Content</h3>
+                <form id="admin-upload-form" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="contentTitle" class="block text-sm font-medium text-gray-700">Content Title</label>
+                            <input type="text" name="contentTitle" id="contentTitle" required
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500">
+                        </div>
+                        <div>
+                            <label for="contentCategory" class="block text-sm font-medium text-gray-700">Category</label>
+                            <div class="relative">
+                                <select name="contentCategory" id="contentCategorySelect"
+                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 bg-white">
+                                    <option value="">Loading categories...</option>
+                                </select>
+                                <input type="text" name="contentCategory" id="contentCategoryInput"
+                                    class="hidden mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500"
+                                    placeholder="Enter new category name">
+                            </div>
+                            <div class="mt-2 flex items-center space-x-3">
+                                <button type="button" id="add-new-category-btn" class="text-sm text-teal-600 hover:text-teal-700">
+                                    + Add New Category
+                                </button>
+                                <span class="text-gray-300">|</span>
+                                <button type="button" id="init-categories-btn" class="text-sm text-purple-600 hover:text-purple-700">
+                                    Initialize Default Categories
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="contentDescription" class="block text-sm font-medium text-gray-700">Description</label>
+                        <textarea name="contentDescription" id="contentDescription" rows="3" required
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500"></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="accessLevel" class="block text-sm font-medium text-gray-700">Plan Requirement</label>
+                            <select name="accessLevel" id="accessLevel" required
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 bg-white">
+                                <option value="essentials">Essentials Plan</option>
+                                <option value="premium">Premium Plan</option>
+                                <option value="custom">Custom (Specific Users)</option>
+                            </select>
+                        </div>
+                        <div id="specific-users-container" class="hidden">
+                            <label class="block text-sm font-medium text-gray-700">Select Specific Users</label>
+                            <div id="specific-users-list" class="mt-2 border border-gray-200 rounded-md overflow-auto max-h-60 p-2">
+                                <!-- Users will be loaded here -->
+                            </div>
+                            <p class="mt-1 text-xs text-gray-500">Check the users who should have access to this content</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="contentFile" class="block text-sm font-medium text-gray-700">Content File (ZIP)</label>
+                            <input type="file" name="contentFile" id="contentFile" accept=".zip" required
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500">
+                            <p class="mt-1 text-xs text-gray-500">Max 50MB</p>
+                        </div>
+                        <div>
+                            <label for="thumbnailFile" class="block text-sm font-medium text-gray-700">Thumbnail Image</label>
+                            <input type="file" name="thumbnailFile" id="thumbnailFile" accept=".png,.jpg,.jpeg,.webp" required
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500">
+                            <p class="mt-1 text-xs text-gray-500">Max 5MB (PNG, JPG, WebP)</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <button type="submit" id="admin-upload-submit-btn"
+                            class="w-full flex items-center justify-center bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-md shadow-md transition-colors duration-300 text-base">
+                            <span class="loader hidden mr-2" id="admin-upload-loader"></span>
+                            Upload Content
+                        </button>
+                    </div>
+
+                    <!-- Message container for content upload form -->
+                    <div id="content-upload-message" class="mt-4 p-3 rounded-md text-sm hidden"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Management Tab -->
+    <div id="panel-content-management" class="admin-panel hidden">
+        <div class="bg-white rounded-lg shadow">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900">Content Management</h3>
+                        <p class="text-sm text-gray-600 mt-1">Manage existing content, categories, and access permissions</p>
+                    </div>
+                    <button id="refresh-content-btn" class="px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm font-medium text-gray-700 transition-colors">
+                        Refresh Content
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div id="content-loading" class="flex justify-center items-center py-12">
+                <div class="loader"></div>
+                <span class="ml-3 text-gray-600">Loading content...</span>
+            </div>
+
+            <!-- Content Table -->
+            <div id="content-table-container" class="hidden overflow-x-auto">
+                <div class="min-h-[600px]">
+                    <table class="w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plan Required</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Uploaded</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="content-table-body" class="bg-white divide-y divide-gray-200">
+                            <!-- Content items will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination Controls -->
+                <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1 flex justify-between sm:hidden">
+                            <button id="content-prev-page-mobile" disabled class="relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-md text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                                Previous
+                            </button>
+                            <button id="content-next-page-mobile" disabled class="ml-3 relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-md text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                                Next
+                            </button>
+                        </div>
+                        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                            <div>
+                                <p class="text-sm text-gray-700">
+                                    Showing <span id="content-showing-start" class="font-medium">0</span> to <span id="content-showing-end" class="font-medium">0</span> of <span id="total-content" class="font-medium">0</span> items
+                                </p>
+                            </div>
+                            <div>
+                                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                                    <button id="content-prev-page" disabled class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                                        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                        </svg>
+                                        Previous
+                                    </button>
+                                    <div id="content-page-numbers" class="flex">
+                                        <!-- Page numbers will be inserted here -->
+                                    </div>
+                                    <button id="content-next-page" disabled class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                                        Next
+                                        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div id="content-empty-state" class="hidden text-center py-12">
+                <p class="text-gray-500">No content found</p>
+                <button id="add-first-content-btn" class="mt-4 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md transition-colors">
+                    Add Your First Content
+                </button>
+            </div>
+
+            <!-- Error State -->
+            <div id="content-error" class="hidden text-center py-12">
+                <p class="text-red-600">Failed to load content</p>
+                <button id="retry-content-btn" class="mt-4 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md transition-colors">
+                    Retry
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- User Action Modal -->
+<div id="user-action-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg shadow-lg max-w-md w-full">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h3 id="modal-title" class="text-lg font-semibold text-gray-900"></h3>
+            </div>
+            <div id="modal-content" class="px-6 py-4">
+                <!-- Modal content will be populated dynamically -->
+            </div>
+            <div class="px-6 py-4 border-t border-gray-200 flex justify-end space-x-3">
+                <button id="modal-cancel-btn" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md transition-colors">
+                    Cancel
+                </button>
+                <button id="modal-confirm-btn" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors">
+                    Confirm
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

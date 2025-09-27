@@ -1,0 +1,139 @@
+<!-- Plans Section Component -->
+<div id="plans-section" class="pb-24">
+    <div id="plans" class="text-center mb-12 pt-8">
+        <h2 class="text-3xl sm:text-4xl font-bold text-gray-700 mb-3">Our Subscription Plans</h2>
+    </div>
+
+    <!-- Restructured container with improved centering -->
+    <div class="container mx-auto px-4">
+        <!-- Feature comparison table structure -->
+        <div class="flex flex-col lg:flex-row max-w-5xl mx-auto">
+            <!-- Left Features Column (Hidden on mobile/tablet) -->
+            <div class="hidden lg:block lg:w-1/4 pt-20">
+                <h3 class="text-lg font-semibold text-gray-700 mb-3 invisible">Features</h3>
+                <ul class="space-y-5 text-sm text-gray-600">
+                    <li class="h-8 flex items-center">Access to Financial Content Library</li>
+                    <li class="h-8 flex items-center">Download Monthly Market Recaps</li>
+                    <li class="h-8 flex items-center">Request Custom Content</li>
+                    <li class="h-8 flex items-center">Whitelabel (Colors, Fonts, Logos, Disclosures)</li>
+                    <li class="h-8 flex items-center">Support</li>
+                    <li class="h-8 flex items-center">30-Day Money Back Guarantee</li>
+                    <li class="h-12 flex items-center font-semibold">Pricing (Month by Month)</li>
+                    <li class="h-12 flex items-center font-semibold">Pricing (Annual)</li>
+                </ul>
+            </div>
+
+            <!-- Plans Container - Center Positioned -->
+            <div class="w-full lg:w-3/4 flex flex-col sm:flex-row gap-6 justify-center items-stretch">
+                <div class="plan-card p-6 rounded-lg shadow-lg flex-1 sm:max-w-xs flex flex-col">
+                    <div class="plan-header p-4 -m-6 mb-6 rounded-t-lg">
+                        <h3 class="text-xl font-semibold text-gray-700 text-center">Essentials</h3>
+                    </div>
+                    <ul class="space-y-5 text-sm text-gray-700 mb-8 flex-grow">
+                        <li class="h-8 flex items-center justify-center"><svg
+                                class="tick-icon plan-feature-icon" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7"></path>
+                            </svg><span class="lg:hidden ml-2">Access to Library</span></li>
+                        <li class="h-8 flex items-center justify-center"><svg
+                                class="tick-icon plan-feature-icon" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7"></path>
+                            </svg><span class="lg:hidden ml-2">Monthly Recaps</span></li>
+                        <li class="h-8 flex items-center justify-center"><svg
+                                class="minus-icon plan-feature-icon" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M20 12H4"></path>
+                            </svg><span class="lg:hidden ml-2">Custom Content</span></li>
+                        <li class="h-8 flex items-center justify-center"><svg
+                                class="minus-icon plan-feature-icon" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M20 12H4"></path>
+                            </svg><span class="lg:hidden ml-2">Whitelabel</span></li>
+                        <li class="h-8 flex items-center justify-center"><span
+                                class="text-center">Basic</span><span class="lg:hidden ml-2"> Support</span>
+                        </li>
+                        <li class="h-8 flex items-center justify-center"><svg
+                                class="minus-icon plan-feature-icon" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M20 12H4"></path>
+                            </svg><span class="lg:hidden ml-2">Money Back Guarantee</span></li>
+                        <li class="h-12 flex items-center justify-center text-lg font-semibold text-gray-700">
+                            $99/Month</li>
+                        <li class="h-12 flex items-center justify-center text-lg font-semibold text-gray-700">
+                            $990/Year <span class="text-xs text-green-600 ml-1">(Save $200)</span></li>
+                    </ul>
+                    <button data-plan-name="Essentials Plan" data-plan-type="Monthly" data-plan-price="99.00"
+                        data-plan-price-display="$99/Month"
+                        class="select-plan-btn w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2.5 px-6 rounded-md transition-colors duration-300 mt-auto">GET
+                        STARTED (Monthly)</button>
+                    <button data-plan-name="Essentials Plan" data-plan-type="Annual" data-plan-price="990.00"
+                        data-plan-price-display="$990/Year"
+                        class="select-plan-btn w-full border border-teal-600 text-teal-600 hover:bg-teal-50 font-semibold py-2.5 px-6 rounded-md transition-colors duration-300 mt-2">CHOOSE
+                        ANNUAL</button>
+                </div>
+                <div
+                    class="plan-card p-6 rounded-lg shadow-lg flex-1 sm:max-w-xs border-2 border-teal-600 flex flex-col">
+                    <div class="plan-header p-4 -m-6 mb-6 rounded-t-lg relative">
+                        <h3 class="text-xl font-semibold text-gray-700 text-center">Premium</h3>
+                        <span
+                            class="absolute top-0 right-0 -mt-3 mr-3 bg-yellow-400 text-yellow-800 text-xs font-semibold px-2 py-0.5 rounded-full">Most
+                            Popular</span>
+                    </div>
+                    <ul class="space-y-5 text-sm text-gray-700 mb-8 flex-grow">
+                        <li class="h-8 flex items-center justify-center"><svg
+                                class="tick-icon plan-feature-icon" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7"></path>
+                            </svg><span class="lg:hidden ml-2">Access to Library</span></li>
+                        <li class="h-8 flex items-center justify-center"><svg
+                                class="tick-icon plan-feature-icon" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7"></path>
+                            </svg><span class="lg:hidden ml-2">Monthly Recaps</span></li>
+                        <li class="h-8 flex items-center justify-center"><svg
+                                class="tick-icon plan-feature-icon" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7"></path>
+                            </svg><span class="lg:hidden ml-2">Custom Content</span></li>
+                        <li class="h-8 flex items-center justify-center"><svg
+                                class="tick-icon plan-feature-icon" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7"></path>
+                            </svg><span class="lg:hidden ml-2">Whitelabel</span></li>
+                        <li class="h-8 flex items-center justify-center"><span
+                                class="text-center">Premium</span><span class="lg:hidden ml-2"> Support</span>
+                        </li>
+                        <li class="h-8 flex items-center justify-center"><svg
+                                class="tick-icon plan-feature-icon" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7"></path>
+                            </svg><span class="lg:hidden ml-2">Money Back Guarantee</span></li>
+                        <li class="h-12 flex items-center justify-center text-lg font-semibold text-gray-700">
+                            $199/Month</li>
+                        <li class="h-12 flex items-center justify-center text-lg font-semibold text-gray-700">
+                            $1990/Year <span class="text-xs text-green-600 ml-1">(Save $400)</span></li>
+                    </ul>
+                    <button data-plan-name="Premium Plan" data-plan-type="Monthly" data-plan-price="199.00"
+                        data-plan-price-display="$199/Month"
+                        class="select-plan-btn w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2.5 px-6 rounded-md transition-colors duration-300 mt-auto">GET
+                        STARTED (Monthly)</button>
+                    <button data-plan-name="Premium Plan" data-plan-type="Annual" data-plan-price="1990.00"
+                        data-plan-price-display="$1990/Year"
+                        class="select-plan-btn w-full border border-teal-600 text-teal-600 hover:bg-teal-50 font-semibold py-2.5 px-6 rounded-md transition-colors duration-300 mt-2">CHOOSE
+                        ANNUAL</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

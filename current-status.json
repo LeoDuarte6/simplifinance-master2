@@ -1,0 +1,125 @@
+{"users": [
+{
+  "localId": "0dfVRafVFmcJxavwezcu9p6K9Wc2",
+  "email": "paul.williams@wrwcollc.com",
+  "emailVerified": false,
+  "passwordHash": "Y/1Fy5wVQ1ctEPJ1JOBubAZCmjb6cXKHuVoX0wDjSHmZESXwG4onqxt8/jSXEUWNISODPsiXVCZdqM58xFq2yA==",
+  "salt": "M4ESTfvgFcPCLg==",
+  "displayName": "Paul Williams ",
+  "lastSignedInAt": "1756405845519",
+  "createdAt": "1750712727854",
+  "disabled": false,
+  "providerUserInfo": []
+},
+{
+  "localId": "9c6gHGBzjMd2qZa81Hhq5iIlosP2",
+  "email": "createduser@gmail.com",
+  "emailVerified": false,
+  "passwordHash": "oBO178Q//YRymDEib9tIqKcWyuDf4H8p643klbX3nP+6Uys4yOYZvtnv0H2v/5HCp8UBETkwlMPOErz/+eRE4Q==",
+  "salt": "9slBF52wg2wqug==",
+  "displayName": "created user test",
+  "createdAt": "1750713362956",
+  "disabled": false,
+  "providerUserInfo": []
+},
+{
+  "localId": "D0Bzku2C8ja0M2NmFX8BTctlSuF2",
+  "email": "scrypt-test@temp.com",
+  "emailVerified": false,
+  "passwordHash": "XbvQ71YaRZPKdkz7g4FPQOVUAiM7Yl46K9QaHRrtmAsT8jNT92OyRGZCdqdg2Dy432X24bqP+CqdOmi1JTHezw==",
+  "salt": "nHdMIiOcCDhjdw==",
+  "displayName": "SCRYPT Test User",
+  "createdAt": "1758979991676",
+  "disabled": false,
+  "providerUserInfo": []
+},
+{
+  "localId": "DhuykrfpnZRokblytVAwXPHrhA33",
+  "email": "jeff@stratnav-am.com",
+  "emailVerified": false,
+  "passwordHash": "Z74Vu2vUAo1KmaTA3x0aizDWdiHVUAoqQLxB1w5bGY3tZkLDZeRIQcCAdiFXu7IkxhNEj9Aa8HTqZ8aJWSfJgA==",
+  "salt": "wI2gZXxHid3oHg==",
+  "lastSignedInAt": "1757342640307",
+  "createdAt": "1757342640307",
+  "disabled": false,
+  "providerUserInfo": []
+},
+{
+  "localId": "Oo8U54W8lrXp5zU5MVgx863JkWW2",
+  "email": "garyb@legacyfolios.com",
+  "emailVerified": false,
+  "passwordHash": "WMMezskDrgEz2HEMT7lwyRi3E4dflrWR6b+mMQwJdEyXQ90o5h5zBHUGF9Dk9jSK5AMhVUB3Qw/0g81eTRO+WA==",
+  "salt": "X3hUwX082M/JFA==",
+  "lastSignedInAt": "1755534448561",
+  "createdAt": "1755198467625",
+  "disabled": false,
+  "providerUserInfo": []
+},
+{
+  "localId": "Tjzbv7HaEKaffPzv6UAHAOMJI4E3",
+  "email": "emerson@keepfinancesimple.com",
+  "emailVerified": false,
+  "passwordHash": "M/KJbuJplIaJv2bU4Hg7cSBU9HEXdanSq7N4gSG1QHjzQDTQD8dM0DXDN/DhdHnc/jeJJsdcUCff6R4JUMtegQ==",
+  "salt": "4m5v0NZHF6NAOw==",
+  "displayName": "Emerson Roth",
+  "lastSignedInAt": "1750698149660",
+  "createdAt": "1750521270164",
+  "disabled": false,
+  "providerUserInfo": []
+},
+{
+  "localId": "bsJxbWlqSLUsaRYpC4cjKyRDfMx2",
+  "email": "admin@simplifinance.com",
+  "emailVerified": false,
+  "passwordHash": "tbFHB0VxbmKOrLedAyGXlAeo69qDWnjbznDwbAbhqLIVai2dXsqgX8yasNMPrEyGdYXSlZIqlbZOGT64MrDOfw==",
+  "salt": "ipPviduV3izQsQ==",
+  "lastSignedInAt": "1750521233565",
+  "createdAt": "1750343989733",
+  "disabled": false,
+  "providerUserInfo": []
+},
+{
+  "localId": "gVdtxwbQp4O47yyfdamOYALBkIE3",
+  "email": "simon@angliaadvisors.com",
+  "emailVerified": false,
+  "passwordHash": "q6RGQJwy7Q02fPE06dVJPopXAyKnmGsrl0sJMAVImLPuo9mGpmW1bAdJ33GZr5NOhpcz/Raj9YoOot1qCj4a5A==",
+  "salt": "L21Vs8HocQ/WIg==",
+  "lastSignedInAt": "1750789881618",
+  "createdAt": "1750789881618",
+  "disabled": false,
+  "providerUserInfo": []
+},
+{
+  "localId": "hpn0zWge2cT5QCUj68fhoAF6GvJ2",
+  "email": "jack@keepfinancesimple.com",
+  "emailVerified": false,
+  "passwordHash": "mD53WuflaCkY6T4YL4SKzlifJbKLPdl8KQxeZk3Ryx0P7kcuqAB0ctBAooQzaz4HmAVcFIjrUlcUkln0mi5GGQ==",
+  "salt": "MsQXcpKvbn4MFA==",
+  "displayName": "Jack Baker",
+  "lastSignedInAt": "1758996497224",
+  "createdAt": "1750521118166",
+  "disabled": false,
+  "providerUserInfo": []
+},
+{
+  "localId": "mEMDzJgPlbgBuYCVLBJor0Y66pJ3",
+  "email": "jared@zeiserwealth.com",
+  "emailVerified": false,
+  "passwordHash": "DOXz9VLdZv/soWFuf23yH0U92NdIGnxAWOBalSYYGkE9QIBUBkdijSTba5qXfC6yFXZzdkvF/i9qbftTuSpaGQ==",
+  "salt": "3dtz7jciup2ZeQ==",
+  "lastSignedInAt": "1756823368431",
+  "createdAt": "1756823203830",
+  "disabled": false,
+  "providerUserInfo": []
+},
+{
+  "localId": "nPJAwxczHsbesOOnOxGP4VCPemD3",
+  "email": "paymentsareworking@gmail.com",
+  "emailVerified": false,
+  "passwordHash": "AO9EpGw9yTscGgCE9J1PxuN21mLrK0/s9dFaYowr/eo6xyGo3zZEvk8sr2iBwGVXasLsqUUTT6swEgWc3qy5Xg==",
+  "salt": "lnKewLFmGooxoA==",
+  "lastSignedInAt": "1750456753472",
+  "createdAt": "1750456753472",
+  "disabled": false,
+  "providerUserInfo": []
+}]}

@@ -1,13 +1,13 @@
 // js/config.js
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDRy7LBdKooljXxTuZq_FvpfXJv4Ec65wQ",
-    authDomain: "simplifinance-65ac9.firebaseapp.com",
-    projectId: "simplifinance-65ac9",
-    storageBucket: "simplifinance-65ac9.firebasestorage.app",
-    messagingSenderId: "122545134930",
-    appId: "1:122545134930:web:2ff0a9c123179697fbae8b",
-    measurementId: "G-GL5JQ4XM2V"
+    apiKey: "AIzaSyC_cE9GxsDsa59b_neWmzhcbwWo4_iTQqc",
+    authDomain: "simplifinancellc-a6795.firebaseapp.com",
+    projectId: "simplifinancellc-a6795",
+    storageBucket: "simplifinancellc-a6795.firebasestorage.app",
+    messagingSenderId: "599812082035",
+    appId: "1:599812082035:web:1d02b29892a2a912745d06",
+    measurementId: "G-J2VYJETRJK"
 };
 
 /**
