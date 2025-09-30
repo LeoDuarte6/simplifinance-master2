@@ -799,13 +799,22 @@ exports.adminDeleteUser = onCall(async (request) => {
             });
         }
 
-        // Delete from Firebase Auth
-        await admin.auth().deleteUser(userId);
+        // Try to delete from Firebase Auth (might not exist if manually created)
+        let authDeleted = false;
+        try {
+            await admin.auth().deleteUser(userId);
+            authDeleted = true;
+            logger.info(`Deleted user ${userId} from Firebase Auth`);
+        } catch (authError) {
+            logger.warn(`User ${userId} not found in Firebase Auth (already deleted or manually created): ${authError.message}`);
+            // Continue to delete from Firestore anyway
+        }
 
-        // Delete from Firestore (or mark as deleted)
+        // Delete from Firestore
         await admin.firestore().collection('users').doc(userId).delete();
+        logger.info(`Deleted user ${userId} from Firestore`);
 
-        logger.info(`SUCCESS: User ${userId} deleted by admin ${auth.uid}`);
+        logger.info(`SUCCESS: User ${userId} deleted by admin ${auth.uid} (Auth: ${authDeleted}, Firestore: true)`);
 
         return {
             status: 'success',
