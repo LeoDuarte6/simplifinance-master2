@@ -663,9 +663,8 @@ gs://simplifinancellc-a6795.firebasestorage.app/
 
 ### Known Issues Post-Migration
 
-1. **Paul Williams** - No `authNetSubscriptionId`, manual billing only
-2. **Thumbnail caching** - URLs regenerated with 30-day expiry
-3. **Admin-created users** - Need manual subscription setup
+1. **Thumbnail caching** - URLs regenerated with 30-day expiry.
+2. . **Admin-created users** - Need manual subscription setup
 
 ---
 
@@ -697,11 +696,9 @@ To add custom domain (simplifinancellc.com):
 ## Support Contacts
 
 ### Platform Maintenance
-- **Developer**: Contact guy's dad (developer)
+- **Developer**: president@buffalowebproducts.com (creator and former developer of application)
 - **Firebase**: Firebase Support (via console)
 - **Authorize.Net**: Merchant support portal
-
-### Emergency Contacts
 - **Firebase Console**: https://console.firebase.google.com/project/simplifinancellc-a6795
 - **Authorize.Net Portal**: https://account.authorize.net
 
