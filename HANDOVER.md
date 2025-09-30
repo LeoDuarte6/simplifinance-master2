@@ -34,8 +34,7 @@ SimpliFinance is a wealth education SaaS platform that provides financial adviso
 ### Key Numbers (Post-Migration)
 - **Users**: 11 active users with passwords preserved
 - **Content Items**: 200 educational materials
-- **Active Subscriptions**: 4 users with Authorize.Net recurring billing
-- **Storage**: ~15GB of content files and thumbnails
+- - **Storage**: ~15GB of content files and thumbnails
 
 ---
 
