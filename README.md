@@ -1,20 +1,5 @@
 # SimpliFinance
 
-## Update Authorize.net Keys
-
-1. Replace the `apiLoginId` and `transactionKey` in the `functions/services/payment.js` file line 7 and 8 with the new keys.
-```javascript
-class PaymentService {
-    constructor() {
-        this.apiLoginId = "7V4Drk4V";
-        this.transactionKey = "45Rs7ua39ADf6cAd";
-```
-
-2. Replace the `environment` in the `functions/services/payment.js` file line 10 with the new environment.
-```javascript
-        this.environment = Constants.endpoint;
-```
-
 ## Deployment
 
 1. Install the Firebase CLI:
