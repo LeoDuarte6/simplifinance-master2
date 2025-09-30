@@ -15,10 +15,16 @@ export class AdminHandler {
 
         // Content pagination properties
         this.currentContent = [];
+        this.filteredContent = [];
         this.contentCurrentPage = 1;
         this.contentPerPage = 10;
         this.totalContent = 0;
         this.contentTotalPages = 0;
+
+        // Content sorting and filtering
+        this.contentSortBy = 'uploadedAt';
+        this.contentSortDirection = 'desc';
+        this.contentSearchQuery = '';
 
         // Added for content upload prevention
         this.isSubmitting = false;
@@ -92,6 +98,12 @@ export class AdminHandler {
             retryContentBtn.addEventListener('click', () => this.loadContent());
         }
 
+        // Content search and filter
+        this.setupContentSearchAndSort();
+
+        // Category management
+        this.setupCategoryManagement();
+
         // Modal controls
         this.setupModalEventListeners();
 
@@ -99,7 +111,7 @@ export class AdminHandler {
         this.setupPasswordToggles();
 
         // Category management
-        this.setupCategoryManagement();
+        this.setupCategoryComboInput();
         this.loadCategories();
 
         // Pagination controls
@@ -133,14 +145,276 @@ export class AdminHandler {
     }
 
     /**
+     * Setup content search and sort functionality
+     */
+    setupContentSearchAndSort() {
+        // Search input
+        const searchInput = document.getElementById('content-search-input');
+        if (searchInput && !searchInput.dataset.listenerAttached) {
+            searchInput.addEventListener('input', (e) => {
+                this.contentSearchQuery = e.target.value.toLowerCase().trim();
+                this.applyContentFilters();
+
+                // Show/hide clear button
+                const clearBtn = document.getElementById('content-clear-search');
+                if (this.contentSearchQuery) {
+                    clearBtn?.classList.remove('hidden');
+                } else {
+                    clearBtn?.classList.add('hidden');
+                }
+            });
+            searchInput.dataset.listenerAttached = 'true';
+        }
+
+        // Clear search button
+        const clearBtn = document.getElementById('content-clear-search');
+        if (clearBtn && !clearBtn.dataset.listenerAttached) {
+            clearBtn.addEventListener('click', () => {
+                const searchInput = document.getElementById('content-search-input');
+                if (searchInput) {
+                    searchInput.value = '';
+                    this.contentSearchQuery = '';
+                    this.applyContentFilters();
+                    clearBtn.classList.add('hidden');
+                }
+            });
+            clearBtn.dataset.listenerAttached = 'true';
+        }
+
+        // Sortable column headers
+        document.querySelectorAll('[data-sort]').forEach(header => {
+            if (!header.dataset.listenerAttached) {
+                header.addEventListener('click', () => {
+                    const sortBy = header.dataset.sort;
+
+                    // Toggle direction if clicking same column, otherwise default to ascending
+                    if (this.contentSortBy === sortBy) {
+                        this.contentSortDirection = this.contentSortDirection === 'asc' ? 'desc' : 'asc';
+                    } else {
+                        this.contentSortBy = sortBy;
+                        this.contentSortDirection = 'asc';
+                    }
+
+                    this.updateSortIndicators();
+                    this.applyContentFilters();
+                });
+                header.dataset.listenerAttached = 'true';
+            }
+        });
+
+        // Initialize sort indicators
+        this.updateSortIndicators();
+    }
+
+    /**
+     * Update sort indicator icons
+     */
+    updateSortIndicators() {
+        document.querySelectorAll('[data-sort]').forEach(header => {
+            const indicator = header.querySelector('.sort-indicator');
+            const svg = indicator?.querySelector('svg');
+
+            if (header.dataset.sort === this.contentSortBy) {
+                indicator?.classList.remove('opacity-0');
+                indicator?.classList.add('opacity-100');
+
+                // Rotate arrow based on direction
+                if (this.contentSortDirection === 'asc') {
+                    svg?.classList.add('transform', 'rotate-180');
+                } else {
+                    svg?.classList.remove('transform', 'rotate-180');
+                }
+            } else {
+                indicator?.classList.add('opacity-0');
+                indicator?.classList.remove('opacity-100');
+                svg?.classList.remove('transform', 'rotate-180');
+            }
+        });
+    }
+
+    /**
+     * Apply filters and sorting to content
+     */
+    applyContentFilters() {
+        let filtered = [...this.currentContent];
+
+        // Apply search filter
+        if (this.contentSearchQuery) {
+            filtered = filtered.filter(item => {
+                const title = (item.title || '').toLowerCase();
+                const description = (item.description || '').toLowerCase();
+                const category = (item.category || '').toLowerCase();
+
+                return title.includes(this.contentSearchQuery) ||
+                       description.includes(this.contentSearchQuery) ||
+                       category.includes(this.contentSearchQuery);
+            });
+        }
+
+        // Apply sorting
+        filtered.sort((a, b) => {
+            let aVal = a[this.contentSortBy];
+            let bVal = b[this.contentSortBy];
+
+            // Handle timestamps
+            if (this.contentSortBy === 'uploadedAt') {
+                aVal = aVal?._seconds || aVal || 0;
+                bVal = bVal?._seconds || bVal || 0;
+            }
+
+            // Handle strings
+            if (typeof aVal === 'string' && typeof bVal === 'string') {
+                aVal = aVal.toLowerCase();
+                bVal = bVal.toLowerCase();
+            }
+
+            if (aVal < bVal) return this.contentSortDirection === 'asc' ? -1 : 1;
+            if (aVal > bVal) return this.contentSortDirection === 'asc' ? 1 : -1;
+            return 0;
+        });
+
+        this.filteredContent = filtered;
+        this.contentCurrentPage = 1; // Reset to first page when filtering
+        this.renderContentTable(filtered);
+    }
+
+    /**
+     * Setup category management interface
+     */
+    setupCategoryManagement() {
+        const manageBtn = document.getElementById('manage-categories-btn');
+        const closeBtn = document.getElementById('close-category-management');
+        const section = document.getElementById('category-management-section');
+
+        if (manageBtn && !manageBtn.dataset.listenerAttached) {
+            manageBtn.addEventListener('click', () => {
+                section?.classList.toggle('hidden');
+                if (!section?.classList.contains('hidden')) {
+                    this.loadCategoryManagementList();
+                }
+            });
+            manageBtn.dataset.listenerAttached = 'true';
+        }
+
+        if (closeBtn && !closeBtn.dataset.listenerAttached) {
+            closeBtn.addEventListener('click', () => {
+                section?.classList.add('hidden');
+            });
+            closeBtn.dataset.listenerAttached = 'true';
+        }
+    }
+
+    /**
+     * Load category management list with usage counts
+     */
+    async loadCategoryManagementList() {
+        const listEl = document.getElementById('category-management-list');
+        if (!listEl) return;
+
+        listEl.innerHTML = '<div class="text-sm text-gray-500 text-center py-4">Loading...</div>';
+
+        try {
+            // Get all categories and content to check usage
+            const [categoriesResult, contentResult] = await Promise.all([
+                httpsCallable(this.app.functions, 'getCategories')(),
+                httpsCallable(this.app.functions, 'getUserAccessibleContent')({ getAllContent: true })
+            ]);
+
+            const categories = categoriesResult.data.categories || [];
+            const content = contentResult.data.content || [];
+
+            // Count usage for each category
+            const categoryUsage = {};
+            content.forEach(item => {
+                const cat = item.category;
+                if (cat) {
+                    categoryUsage[cat] = (categoryUsage[cat] || 0) + 1;
+                }
+            });
+
+            if (categories.length === 0) {
+                listEl.innerHTML = '<div class="text-sm text-gray-500 text-center py-4">No categories yet</div>';
+                return;
+            }
+
+            listEl.innerHTML = categories.map(cat => {
+                const usageCount = categoryUsage[cat.name] || 0;
+                const canDelete = usageCount === 0;
+
+                return `
+                    <div class="flex items-center justify-between p-2 bg-white rounded border border-gray-200 hover:border-gray-300">
+                        <div class="flex-1">
+                            <span class="text-sm font-medium text-gray-900">${cat.name}</span>
+                            <span class="text-xs text-gray-500 ml-2">(${usageCount} ${usageCount === 1 ? 'item' : 'items'})</span>
+                        </div>
+                        ${canDelete ? `
+                            <button
+                                type="button"
+                                class="delete-category-btn text-red-600 hover:text-red-800 text-sm px-2 py-1 rounded hover:bg-red-50"
+                                data-category-id="${cat.id}"
+                                data-category-name="${cat.name}"
+                            >
+                                Delete
+                            </button>
+                        ` : `
+                            <span class="text-xs text-gray-400 px-2 py-1">In use</span>
+                        `}
+                    </div>
+                `;
+            }).join('');
+
+            // Add delete handlers
+            listEl.querySelectorAll('.delete-category-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const catId = btn.dataset.categoryId;
+                    const catName = btn.dataset.categoryName;
+                    if (confirm(`Delete category "${catName}"? This cannot be undone.`)) {
+                        this.deleteCategory(catId, catName);
+                    }
+                });
+            });
+
+        } catch (error) {
+            console.error('Error loading category management:', error);
+            listEl.innerHTML = '<div class="text-sm text-red-600 text-center py-4">Failed to load categories</div>';
+        }
+    }
+
+    /**
+     * Delete a category
+     */
+    async deleteCategory(categoryId, categoryName) {
+        try {
+            const deleteCategory = httpsCallable(this.app.functions, 'deleteCategory');
+            const result = await deleteCategory({ categoryId });
+
+            if (result.data.status === 'success') {
+                // Reload the list
+                await this.loadCategoryManagementList();
+
+                // Reload categories in the dropdown
+                await this.loadCategories();
+
+                alert(`Category "${categoryName}" deleted successfully`);
+            } else {
+                alert(`Failed to delete category: ${result.data.message}`);
+            }
+        } catch (error) {
+            console.error('Error deleting category:', error);
+            alert(`Failed to delete category: ${error.message}`);
+        }
+    }
+
+    /**
      * Setup password toggle functionality
      */
     setupPasswordToggles() {
         const newUserPasswordToggle = document.getElementById('toggle-new-user-password');
-        if (newUserPasswordToggle) {
+        if (newUserPasswordToggle && !newUserPasswordToggle.dataset.listenerAttached) {
             newUserPasswordToggle.addEventListener('click', () => {
                 this.togglePasswordVisibility('new-user-password', 'toggle-new-user-password');
             });
+            newUserPasswordToggle.dataset.listenerAttached = 'true';
         }
     }
 
@@ -177,16 +451,44 @@ export class AdminHandler {
     /**
      * Setup category management
      */
-    setupCategoryManagement() {
-        const addNewCategoryBtn = document.getElementById('add-new-category-btn');
-        if (addNewCategoryBtn) {
-            addNewCategoryBtn.addEventListener('click', () => this.toggleCategoryInput());
-        }
+    setupCategoryComboInput() {
+        const input = document.getElementById('contentCategoryInput');
+        const dropdown = document.getElementById('categoryDropdown');
 
-        const initCategoriesBtn = document.getElementById('init-categories-btn');
-        if (initCategoriesBtn) {
-            initCategoriesBtn.addEventListener('click', () => this.initializeCategories());
-        }
+        if (!input || !dropdown) return;
+
+        // Store available categories
+        this.availableCategories = [];
+
+        // Show dropdown on focus
+        input.addEventListener('focus', () => {
+            this.filterAndShowCategoryDropdown();
+        });
+
+        // Filter dropdown as user types
+        input.addEventListener('input', () => {
+            this.filterAndShowCategoryDropdown();
+        });
+
+        // Hide dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        // Prevent form submission on Enter in category input
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                // If there's a highlighted option, select it
+                const highlighted = dropdown.querySelector('.bg-teal-50');
+                if (highlighted) {
+                    input.value = highlighted.dataset.category;
+                    dropdown.classList.add('hidden');
+                }
+            }
+        });
     }
 
     /**
@@ -237,18 +539,80 @@ export class AdminHandler {
     }
 
     /**
-     * Render category options in dropdown
+     * Store and display available categories
      */
     renderCategoryOptions(categories) {
-        const select = document.getElementById('contentCategorySelect');
-        if (select) {
-            const hasCategories = categories && categories.length > 0;
-            select.innerHTML = `
-                <option value="">Select a category...</option>
-                ${hasCategories ? categories.map(cat => `<option value="${cat}">${cat}</option>`).join('') : ''}
-                ${!hasCategories ? '<option value="" disabled>No categories available</option>' : ''}
-            `;
+        this.availableCategories = categories || [];
+
+        const statusEl = document.getElementById('categoryStatus');
+        if (statusEl) {
+            if (this.availableCategories.length > 0) {
+                statusEl.textContent = `${this.availableCategories.length} categories available`;
+                statusEl.classList.remove('text-red-600');
+                statusEl.classList.add('text-gray-500');
+            } else {
+                statusEl.textContent = 'No categories yet - type to create new';
+                statusEl.classList.remove('text-gray-500');
+                statusEl.classList.add('text-red-600');
+            }
         }
+    }
+
+    /**
+     * Filter and show category dropdown based on input
+     */
+    filterAndShowCategoryDropdown() {
+        const input = document.getElementById('contentCategoryInput');
+        const dropdown = document.getElementById('categoryDropdown');
+        const dropdownContent = document.getElementById('categoryDropdownContent');
+
+        if (!input || !dropdown || !dropdownContent) return;
+
+        const query = input.value.toLowerCase().trim();
+        const filtered = this.availableCategories.filter(cat =>
+            cat.toLowerCase().includes(query)
+        );
+
+        // If no categories at all
+        if (this.availableCategories.length === 0) {
+            dropdownContent.innerHTML = `
+                <div class="px-4 py-3 text-sm text-gray-500 text-center">
+                    No categories yet. Type to create your first category.
+                </div>
+            `;
+            dropdown.classList.remove('hidden');
+            return;
+        }
+
+        // If typing and no matches, don't show dropdown
+        if (query && filtered.length === 0) {
+            dropdown.classList.add('hidden');
+            return;
+        }
+
+        // Show filtered categories
+        const categoriesToShow = filtered.length > 0 ? filtered : this.availableCategories;
+
+        dropdownContent.innerHTML = categoriesToShow.map((cat, index) => {
+            return `
+                <div
+                    class="px-4 py-2 hover:bg-teal-50 cursor-pointer flex items-center category-option transition-colors ${index === 0 && query ? 'bg-teal-50' : ''}"
+                    data-category="${cat}"
+                >
+                    <span class="text-sm text-gray-900">${cat}</span>
+                </div>
+            `;
+        }).join('');
+
+        // Add click handlers to category options
+        dropdownContent.querySelectorAll('.category-option').forEach(option => {
+            option.addEventListener('click', () => {
+                input.value = option.dataset.category;
+                dropdown.classList.add('hidden');
+            });
+        });
+
+        dropdown.classList.remove('hidden');
     }
 
     /**
@@ -286,48 +650,11 @@ export class AdminHandler {
     }
 
     /**
-     * Toggle between category dropdown and input
-     */
-    toggleCategoryInput() {
-        const select = document.getElementById('contentCategorySelect');
-        const input = document.getElementById('contentCategoryInput');
-        const button = document.getElementById('add-new-category-btn');
-
-        if (select && input && button) {
-            const isSelectVisible = !select.classList.contains('hidden');
-
-            if (isSelectVisible) {
-                // Show input, hide select
-                select.classList.add('hidden');
-                input.classList.remove('hidden');
-                input.required = true;
-                input.focus();
-                button.textContent = '← Back to Categories';
-            } else {
-                // Show select, hide input
-                select.classList.remove('hidden');
-                input.classList.add('hidden');
-                input.required = false;
-                input.value = '';
-                button.textContent = '+ Add New Category';
-            }
-        }
-    }
-
-    /**
-     * Get selected category value
+     * Get selected/entered category value
      */
     getSelectedCategory() {
-        const select = document.getElementById('contentCategorySelect');
         const input = document.getElementById('contentCategoryInput');
-
-        if (input && !input.classList.contains('hidden') && input.value.trim()) {
-            return input.value.trim();
-        } else if (select && !select.classList.contains('hidden') && select.value) {
-            return select.value;
-        }
-
-        return '';
+        return input ? input.value.trim() : '';
     }
 
     /**
@@ -1581,35 +1908,57 @@ export class AdminHandler {
     }
 
     async executeUpdateBilling() {
+        console.log('executeUpdateBilling called');
         const billingDateInput = document.getElementById('billing-date-input');
         const newBillingDate = billingDateInput?.value;
-        
+
+        console.log('Billing date input:', newBillingDate);
+
         if (!newBillingDate) {
+            console.error('No billing date provided');
             this.showModalActionMessage('Please select a billing date', 'error');
             return;
         }
 
         // Get user email from the user data
         const user = this.currentUsers.find(u => u.id === this.currentUserId);
+        console.log('Found user:', user?.email);
+
         if (!user) {
+            console.error('User not found with ID:', this.currentUserId);
             this.showModalActionMessage('User not found', 'error');
             return;
         }
 
-        const updateUserBillingDate = httpsCallable(this.app.functions, 'updateUserBillingDate');
-        const result = await updateUserBillingDate({
-            userEmail: user.email,
-            newBillingDate: newBillingDate
-        });
+        if (!user.authNetSubscriptionId || user.authNetSubscriptionId === 'admin-account-no-subscription') {
+            console.error('User has no valid subscription:', user.authNetSubscriptionId);
+            this.showModalActionMessage('This user does not have an active subscription', 'error');
+            return;
+        }
 
-        if (result.data.status === 'success') {
-            this.showModalActionMessage(`✅ Billing date updated successfully for ${result.data.userDetails.name}!`, 'success');
-            setTimeout(() => {
-                this.closeModal();
-                this.loadUsers(); // Refresh the table
-            }, 2000);
-        } else {
-            this.showModalActionMessage(result.data.message || 'Failed to update billing date', 'error');
+        console.log('Calling updateUserBillingDate with:', { userEmail: user.email, newBillingDate });
+
+        try {
+            const updateUserBillingDate = httpsCallable(this.app.functions, 'updateUserBillingDate');
+            const result = await updateUserBillingDate({
+                userEmail: user.email,
+                newBillingDate: newBillingDate
+            });
+
+            console.log('Update result:', result.data);
+
+            if (result.data.status === 'success') {
+                this.showModalActionMessage(`✅ Billing date updated successfully for ${result.data.userDetails.name}!`, 'success');
+                setTimeout(() => {
+                    this.closeModal();
+                    this.loadUsers(); // Refresh the table
+                }, 2000);
+            } else {
+                this.showModalActionMessage(result.data.message || 'Failed to update billing date', 'error');
+            }
+        } catch (error) {
+            console.error('Update billing date error:', error);
+            this.showModalActionMessage(`Error: ${error.message}`, 'error');
         }
     }
 
@@ -1628,12 +1977,14 @@ export class AdminHandler {
             if (result.data.status === 'success') {
                 const content = result.data.content || [];
                 this.currentContent = content;
+                this.filteredContent = content;
                 this.contentCurrentPage = 1; // Reset to first page when loading new data
 
                 if (content.length === 0) {
                     this.showContentEmptyState();
                 } else {
-                    this.renderContentTable(content);
+                    // Apply current filters and sort
+                    this.applyContentFilters();
                 }
             } else {
                 this.showContentError('Failed to load content');

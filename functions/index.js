@@ -15,7 +15,7 @@ setGlobalOptions({
 // Initialize admin with explicit configuration for v2 functions
 admin.initializeApp({
     projectId: process.env.GCLOUD_PROJECT || process.env.GCP_PROJECT,
-    storageBucket: 'simplifinance-65ac9.firebasestorage.app'
+    storageBucket: 'simplifinancellc-a6795.firebasestorage.app'
 });
 
 // Initialize services
@@ -1497,11 +1497,77 @@ exports.getUserAccessibleContent = onCall(async (request) => {
                 });
             });
 
-            logger.info(`SUCCESS: Retrieved ${allContent.length} content items (admin view) for user ${userId}`);
+            // Generate signed URLs with caching for admin preview
+            const bucket = admin.storage().bucket();
+            const URL_EXPIRY_DAYS = 30;
+            const REFRESH_THRESHOLD_DAYS = 7;
+            const expiryTime = Date.now() + (URL_EXPIRY_DAYS * 24 * 60 * 60 * 1000);
+            const refreshThreshold = Date.now() + (REFRESH_THRESHOLD_DAYS * 24 * 60 * 60 * 1000);
+
+            const contentWithUrls = await Promise.all(allContent.map(async (item) => {
+                try {
+                    // Check if cached URLs are still valid
+                    const cachedDownloadUrl = item.cachedDownloadUrl;
+                    const cachedThumbnailUrl = item.cachedThumbnailUrl;
+                    const urlExpiry = item.urlExpiry?._seconds ? item.urlExpiry._seconds * 1000 : item.urlExpiry;
+
+                    // Use cached URLs if they exist and won't expire soon
+                    if (cachedDownloadUrl && urlExpiry && urlExpiry > refreshThreshold) {
+                        return {
+                            ...item,
+                            downloadUrl: cachedDownloadUrl,
+                            thumbnailUrl: cachedThumbnailUrl || item.thumbnailUrl
+                        };
+                    }
+
+                    // Generate fresh signed URLs
+                    const fileName = item.originalContentFilename || `${item.title.replace(/\s/g, '_')}.zip`;
+                    const filePath = `library/${item.id}/${fileName}`;
+
+                    const [downloadUrl] = await bucket.file(filePath).getSignedUrl({
+                        action: 'read',
+                        expires: expiryTime
+                    });
+
+                    // Generate signed URL for thumbnail if exists
+                    let thumbnailUrl = null;
+                    if (item.originalThumbnailFilename) {
+                        const thumbnailPath = `library/${item.id}/${item.originalThumbnailFilename}`;
+                        try {
+                            const [url] = await bucket.file(thumbnailPath).getSignedUrl({
+                                action: 'read',
+                                expires: expiryTime
+                            });
+                            thumbnailUrl = url;
+                        } catch (thumbError) {
+                            logger.warn(`Could not generate thumbnail URL for ${item.id}:`, thumbError.message);
+                        }
+                    }
+
+                    // Cache the URLs in Firestore for future requests (async, don't wait)
+                    admin.firestore().collection('content').doc(item.id).update({
+                        cachedDownloadUrl: downloadUrl,
+                        cachedThumbnailUrl: thumbnailUrl,
+                        urlExpiry: admin.firestore.Timestamp.fromMillis(expiryTime),
+                        urlLastUpdated: admin.firestore.FieldValue.serverTimestamp()
+                    }).catch(err => logger.warn(`Failed to cache URLs for ${item.id}:`, err.message));
+
+                    return {
+                        ...item,
+                        downloadUrl,
+                        thumbnailUrl: thumbnailUrl || item.thumbnailUrl
+                    };
+                } catch (error) {
+                    logger.error(`Error generating URLs for content ${item.id}:`, error);
+                    return item; // Return item without URLs if generation fails
+                }
+            }));
+
+            logger.info(`SUCCESS: Retrieved ${contentWithUrls.length} content items (admin view) for user ${userId}`);
 
             return {
                 status: 'success',
-                content: allContent,
+                content: contentWithUrls,
                 userPlan: 'admin'
             };
         }
@@ -1577,11 +1643,77 @@ exports.getUserAccessibleContent = onCall(async (request) => {
             }
         });
 
-        logger.info(`SUCCESS: Retrieved ${accessibleContent.length} content items for user ${userId}`);
+        // Generate signed URLs with caching for performance
+        const bucket = admin.storage().bucket();
+        const URL_EXPIRY_DAYS = 30; // URLs valid for 30 days
+        const REFRESH_THRESHOLD_DAYS = 7; // Regenerate if less than 7 days remaining
+        const expiryTime = Date.now() + (URL_EXPIRY_DAYS * 24 * 60 * 60 * 1000);
+        const refreshThreshold = Date.now() + (REFRESH_THRESHOLD_DAYS * 24 * 60 * 60 * 1000);
+
+        const contentWithUrls = await Promise.all(accessibleContent.map(async (item) => {
+            try {
+                // Check if cached URLs are still valid
+                const cachedDownloadUrl = item.cachedDownloadUrl;
+                const cachedThumbnailUrl = item.cachedThumbnailUrl;
+                const urlExpiry = item.urlExpiry?._seconds ? item.urlExpiry._seconds * 1000 : item.urlExpiry;
+
+                // Use cached URLs if they exist and won't expire soon
+                if (cachedDownloadUrl && urlExpiry && urlExpiry > refreshThreshold) {
+                    return {
+                        ...item,
+                        downloadUrl: cachedDownloadUrl,
+                        thumbnailUrl: cachedThumbnailUrl || item.thumbnailUrl
+                    };
+                }
+
+                // Generate fresh signed URLs
+                const fileName = item.originalContentFilename || `${item.title.replace(/\s/g, '_')}.zip`;
+                const filePath = `library/${item.id}/${fileName}`;
+
+                const [downloadUrl] = await bucket.file(filePath).getSignedUrl({
+                    action: 'read',
+                    expires: expiryTime
+                });
+
+                // Generate signed URL for thumbnail if exists
+                let thumbnailUrl = null;
+                if (item.originalThumbnailFilename) {
+                    const thumbnailPath = `library/${item.id}/${item.originalThumbnailFilename}`;
+                    try {
+                        const [url] = await bucket.file(thumbnailPath).getSignedUrl({
+                            action: 'read',
+                            expires: expiryTime
+                        });
+                        thumbnailUrl = url;
+                    } catch (thumbError) {
+                        logger.warn(`Could not generate thumbnail URL for ${item.id}:`, thumbError.message);
+                    }
+                }
+
+                // Cache the URLs in Firestore for future requests (async, don't wait)
+                admin.firestore().collection('content').doc(item.id).update({
+                    cachedDownloadUrl: downloadUrl,
+                    cachedThumbnailUrl: thumbnailUrl,
+                    urlExpiry: admin.firestore.Timestamp.fromMillis(expiryTime),
+                    urlLastUpdated: admin.firestore.FieldValue.serverTimestamp()
+                }).catch(err => logger.warn(`Failed to cache URLs for ${item.id}:`, err.message));
+
+                return {
+                    ...item,
+                    downloadUrl,
+                    thumbnailUrl: thumbnailUrl || item.thumbnailUrl
+                };
+            } catch (error) {
+                logger.error(`Error generating URLs for content ${item.id}:`, error);
+                return item; // Return item without URLs if generation fails
+            }
+        }));
+
+        logger.info(`SUCCESS: Retrieved ${contentWithUrls.length} content items for user ${userId}`);
 
         return {
             status: 'success',
-            content: accessibleContent,
+            content: contentWithUrls,
             userPlan: planLevel
         };
 
@@ -2053,6 +2185,59 @@ exports.getCategories = onCall(async (request) => {
 
         throw new HttpsError('internal', error.message || 'Failed to retrieve categories', {
             code: 'GET_CATEGORIES_FAILED'
+        });
+    }
+});
+
+// Delete/deactivate a category (admin only)
+exports.deleteCategory = onCall(async (request) => {
+    const { data, auth } = request;
+
+    try {
+        logger.info("=== DELETE CATEGORY START ===");
+
+        // Validate authentication and admin status
+        const authValidation = ValidationUtils.validateAuth(auth);
+        if (!authValidation.isValid) {
+            throw new HttpsError('unauthenticated', authValidation.error);
+        }
+
+        // Verify admin status
+        const adminResult = await dbService.getUser(auth.uid);
+        if (!adminResult.success || !adminResult.userData.isAdmin) {
+            throw new HttpsError('permission-denied', 'Unauthorized: Admin access required', {
+                code: 'ADMIN_ACCESS_REQUIRED'
+            });
+        }
+
+        const { categoryId } = data;
+
+        if (!categoryId) {
+            throw new HttpsError('invalid-argument', 'Category ID is required');
+        }
+
+        // Mark category as inactive instead of deleting
+        await admin.firestore().collection('categories').doc(categoryId).update({
+            isActive: false,
+            updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        });
+
+        logger.info(`SUCCESS: Category ${categoryId} marked as inactive`);
+
+        return {
+            status: 'success',
+            message: 'Category deleted successfully'
+        };
+
+    } catch (error) {
+        logger.error("Error in deleteCategory:", error);
+
+        if (error.code && error.message) {
+            throw error;
+        }
+
+        throw new HttpsError('internal', error.message || 'Failed to delete category', {
+            code: 'DELETE_CATEGORY_FAILED'
         });
     }
 });

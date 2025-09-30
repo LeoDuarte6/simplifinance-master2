@@ -71,3 +71,10 @@ node_modules/
 functions/.env
 
 old-production/
+
+# Migration credentials - NEVER COMMIT
+MIGRATION-CREDENTIALS.md
+*-users.json
+
+# Migration scripts folder
+migration-scripts/

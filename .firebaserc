@@ -1,12 +1,8 @@
 {
   "projects": {
-    "default": "simplifinance-65ac9"
+    "default": "simplifinancellc-a6795"
   },
   "targets": {},
-  "etags": {
-    "simplifinance-65ac9": {
-      "extensionInstances": {}
-    }
-  },
+  "etags": {},
   "dataconnectEmulatorConfig": {}
 }
