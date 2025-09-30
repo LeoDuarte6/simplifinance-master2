@@ -1865,8 +1865,10 @@ export class AdminHandler {
         });
 
         if (result.data.status === 'success') {
-            this.showModalActionMessage('Password updated successfully!', 'success');
-            this.closeModal();
+            this.showModalActionMessage('✅ Password updated successfully!', 'success');
+            setTimeout(() => {
+                this.closeModal();
+            }, 1500);
         } else {
             this.showModalActionMessage(result.data.message || 'Failed to update password', 'error');
         }
@@ -1884,9 +1886,11 @@ export class AdminHandler {
         });
 
         if (result.data.status === 'success') {
-            this.showModalActionMessage('User role updated successfully!', 'success');
-            this.closeModal();
-            this.loadUsers(); // Refresh the table
+            this.showModalActionMessage('✅ User role updated successfully!', 'success');
+            setTimeout(() => {
+                this.closeModal();
+                this.loadUsers(); // Refresh the table
+            }, 1500);
         } else {
             this.showModalActionMessage(result.data.message || 'Failed to update user role', 'error');
         }
@@ -1899,9 +1903,11 @@ export class AdminHandler {
         });
 
         if (result.data.status === 'success') {
-            this.showModalActionMessage('User deleted successfully!', 'success');
-            this.closeModal();
-            this.loadUsers(); // Refresh the table
+            this.showModalActionMessage('✅ User deleted successfully!', 'success');
+            setTimeout(() => {
+                this.closeModal();
+                this.loadUsers(); // Refresh the table
+            }, 1500);
         } else {
             this.showModalActionMessage(result.data.message || 'Failed to delete user', 'error');
         }
